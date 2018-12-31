@@ -158,19 +158,19 @@ public class MainMenuListingManager {
 						makeItem(R.string.mainmenu_frontpage, MainMenuFragment.MENU_MENU_ACTION_FRONTPAGE, null, true));
 			}
 
-			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.POPULAR)){
+			// if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.POPULAR)){
+			// 	mAdapter.appendToGroup(GROUP_MAIN_ITEMS,
+			// 			makeItem(R.string.mainmenu_popular, MainMenuFragment.MENU_MENU_ACTION_POPULAR, null, false));
+			// }
+
+			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.SUBSCRIBED)){
 				mAdapter.appendToGroup(GROUP_MAIN_ITEMS,
-						makeItem(R.string.mainmenu_popular, MainMenuFragment.MENU_MENU_ACTION_POPULAR, null, false));
+						makeItem(R.string.mainmenu_subscribed, MainMenuFragment.MENU_MENU_ACTION_SUBSCRIBED, null, false));
 			}
 
 			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.ALL)){
 				mAdapter.appendToGroup(GROUP_MAIN_ITEMS,
 						makeItem(R.string.mainmenu_all, MainMenuFragment.MENU_MENU_ACTION_ALL, null, false));
-			}
-
-			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.CUSTOM)){
-				mAdapter.appendToGroup(GROUP_MAIN_ITEMS,
-						makeItem(R.string.mainmenu_custom_destination, MainMenuFragment.MENU_MENU_ACTION_CUSTOM, null, false));
 			}
 
 			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.RANDOM)){
@@ -181,6 +181,11 @@ public class MainMenuListingManager {
 			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.RANDOM_NSFW)){
 				mAdapter.appendToGroup(GROUP_MAIN_ITEMS,
 						makeItem(R.string.mainmenu_random_nsfw, MainMenuFragment.MENU_MENU_ACTION_RANDOM_NSFW, null, false));
+			}
+
+			if (mainMenuShortcutItems.contains(MainMenuFragment.MainMenuShortcutItems.CUSTOM)){
+				mAdapter.appendToGroup(GROUP_MAIN_ITEMS,
+						makeItem(R.string.mainmenu_custom_destination, MainMenuFragment.MENU_MENU_ACTION_CUSTOM, null, false));
 			}
 		}
 

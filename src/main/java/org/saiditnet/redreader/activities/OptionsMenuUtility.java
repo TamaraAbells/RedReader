@@ -501,8 +501,8 @@ public final class OptionsMenuUtility {
 		// if(includeRising)
 		// 	addSort(activity, sortPosts, R.string.sort_posts_rising, PostSort.RISING);
 		addSort(activity, sortPosts, R.string.sort_posts_controversial, PostSort.CONTROVERSIAL);
-		if(includeBest)
-			addSort(activity, sortPosts, R.string.sort_posts_best, PostSort.BEST);
+		// if(includeBest)
+		// 	addSort(activity, sortPosts, R.string.sort_posts_best, PostSort.BEST);
 
 		final SubMenu sortPostsTop = sortPosts.addSubMenu(R.string.sort_posts_top);
 
@@ -549,7 +549,7 @@ public final class OptionsMenuUtility {
 			sortComments.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		}
 
-		addSort(activity, sortComments, R.string.sort_comments_best, PostCommentListingURL.Sort.BEST);
+		// addSort(activity, sortComments, R.string.sort_comments_best, PostCommentListingURL.Sort.BEST);
 		addSort(activity, sortComments, R.string.sort_comments_hot, PostCommentListingURL.Sort.HOT);
 		addSort(activity, sortComments, R.string.sort_comments_new, PostCommentListingURL.Sort.NEW);
 		addSort(activity, sortComments, R.string.sort_comments_old, PostCommentListingURL.Sort.OLD);

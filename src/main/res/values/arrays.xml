@@ -586,6 +586,7 @@
     <string-array name="pref_menus_mainmenu_useritems_items_default">
         <item>profile</item>
         <item>inbox</item>
+        <item>submitted</item>
         <item>saved</item>
         <item>hidden</item>
         <item>upvoted</item>
@@ -766,6 +767,7 @@
 		<item>@string/mainmenu_custom_destination</item>
 		<item>@string/mainmenu_random</item>
 		<item>@string/mainmenu_random_nsfw</item>
+		<item>@string/mainmenu_subscribed</item>
 	</string-array>
 
 	<!-- Constants. Do not change. -->
@@ -776,6 +778,7 @@
 		<item>custom</item>
 		<item>random</item>
 		<item>random_nsfw</item>
+		<item>subscribed</item>
 	</string-array>
 
 	<!-- Constants. Do not change. -->
@@ -783,6 +786,8 @@
 		<item>frontpage</item>
 		<item>all</item>
 		<item>custom</item>
+		<item>random</item>
+		<item>subscribed</item>
 	</string-array>
 
 </resources>
