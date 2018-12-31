@@ -17,6 +17,7 @@
 
 package org.saiditnet.redreader.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -440,8 +441,7 @@ public class PostListingFragment extends RRFragment
 
 			final LinearLayoutManager layoutManager = (LinearLayoutManager)mRecyclerView.getLayoutManager();
 
-			if(mPostListingManager.getPostCount() > 0
-					&& (layoutManager.getItemCount() - layoutManager.findLastVisibleItemPosition() < 20
+			if((layoutManager.getItemCount() - layoutManager.findLastVisibleItemPosition() < 20
 					&& (mPostCountLimit <= 0 || mPostRefreshCount.get() > 0)
 					|| (mPreviousFirstVisibleItemPosition != null
 							&& layoutManager.getItemCount() <= mPreviousFirstVisibleItemPosition))) {
@@ -627,6 +627,7 @@ public class PostListingFragment extends RRFragment
 				final JsonBufferedArray posts = listing.getArray("children");
 
 				final boolean isNsfwAllowed = PrefsUtility.pref_behaviour_nsfw(activity, mSharedPreferences);
+				final boolean hideReadPosts = PrefsUtility.pref_behaviour_hide_read_posts(activity, mSharedPreferences);
 				final boolean isConnectionWifi = General.isConnectionWifi(activity);
 
 				final PrefsUtility.AppearanceThumbnailsShow thumbnailsPref = PrefsUtility.appearance_thumbnails_show(
@@ -657,6 +658,9 @@ public class PostListingFragment extends RRFragment
 
 				final PrefsUtility.VideoViewMode videoViewMode
 						= PrefsUtility.pref_behaviour_videoview_mode(activity, mSharedPreferences);
+
+				final boolean leftHandedMode
+						= PrefsUtility.pref_appearance_left_handed(activity, mSharedPreferences);
 
 				final boolean subredditFilteringEnabled =
 						mPostListingURL.pathType() == RedditURLParser.SUBREDDIT_POST_LISTING_URL
@@ -708,6 +712,10 @@ public class PostListingFragment extends RRFragment
 								timestamp,
 								showSubredditName,
 								downloadThisThumbnail);
+
+						// Skip adding this post (go to next iteration) if it has been clicked on AND user preference
+						// "hideReadPosts" is true
+						if(hideReadPosts && preparedPost.isRead()) continue;
 
 						if(precacheComments) {
 
@@ -797,46 +805,11 @@ public class PostListingFragment extends RRFragment
 									return;
 								}
 
-								final URI uri = General.uriFromString(info.urlOriginal);
-								if(uri == null) {
-									Log.i(TAG, String.format(
-											"Not precaching '%s': failed to parse URL", post.getUrl()));
-									return;
+								precacheImage(activity, info.urlOriginal, positionInList);
+
+								if(info.urlAudioStream != null) {
+									precacheImage(activity, info.urlAudioStream, positionInList);
 								}
-
-								CacheManager.getInstance(activity).makeRequest(new CacheRequest(
-										uri,
-										RedditAccountManager.getAnon(),
-										null,
-										Constants.Priority.IMAGE_PRECACHE,
-										positionInList,
-										DownloadStrategyIfNotCached.INSTANCE,
-										Constants.FileType.IMAGE,
-										DOWNLOAD_QUEUE_IMAGE_PRECACHE,
-										false,
-										false,
-										activity
-								) {
-									@Override protected void onCallbackException(final Throwable t) {}
-									@Override protected void onDownloadNecessary() {}
-									@Override protected void onDownloadStarted() {}
-
-									@Override protected void onFailure(final @CacheRequest.RequestFailureType int type, final Throwable t, final Integer status, final String readableMessage) {
-
-										Log.e(TAG, String.format(
-												Locale.US,
-												"Failed to precache %s (RequestFailureType %d, status %s, readable '%s')",
-														info.urlOriginal,
-														type,
-														status == null ? "NULL" : status.toString(),
-														readableMessage == null ? "NULL" : readableMessage));
-									}
-									@Override protected void onProgress(final boolean authorizationInProgress, final long bytesRead, final long totalBytes) {}
-
-									@Override protected void onSuccess(final CacheManager.ReadableCacheFile cacheFile, final long timestamp, final UUID session, final boolean fromCache, final String mimetype) {
-										Log.i(TAG, "Successfully precached " + info.urlOriginal);
-									}
-								});
 							}
 						});
 
@@ -844,7 +817,7 @@ public class PostListingFragment extends RRFragment
 								preparedPost,
 								PostListingFragment.this,
 								activity,
-								mPostListingURL));
+								leftHandedMode));
 
 						mPostCount++;
 						mPostRefreshCount.decrementAndGet();
@@ -884,5 +857,65 @@ public class PostListingFragment extends RRFragment
 		}
 
 		return false;
+	}
+
+	private void precacheImage(
+			final Activity activity,
+			final String url,
+			final int positionInList) {
+
+		final URI uri = General.uriFromString(url);
+		if(uri == null) {
+			Log.i(TAG, String.format(
+					"Not precaching '%s': failed to parse URL", url));
+			return;
+		}
+
+		CacheManager.getInstance(activity).makeRequest(new CacheRequest(
+				uri,
+				RedditAccountManager.getAnon(),
+				null,
+				Constants.Priority.IMAGE_PRECACHE,
+				positionInList,
+				DownloadStrategyIfNotCached.INSTANCE,
+				Constants.FileType.IMAGE,
+				CacheRequest.DOWNLOAD_QUEUE_IMAGE_PRECACHE,
+				false,
+				false,
+				activity
+		) {
+			@Override
+			protected void onCallbackException(final Throwable t) {
+			}
+
+			@Override
+			protected void onDownloadNecessary() {
+			}
+
+			@Override
+			protected void onDownloadStarted() {
+			}
+
+			@Override
+			protected void onFailure(final @CacheRequest.RequestFailureType int type, final Throwable t, final Integer status, final String readableMessage) {
+
+				Log.e(TAG, String.format(
+						Locale.US,
+						"Failed to precache %s (RequestFailureType %d, status %s, readable '%s')",
+						url,
+						type,
+						status == null ? "NULL" : status.toString(),
+						readableMessage == null ? "NULL" : readableMessage));
+			}
+
+			@Override
+			protected void onProgress(final boolean authorizationInProgress, final long bytesRead, final long totalBytes) {
+			}
+
+			@Override
+			protected void onSuccess(final CacheManager.ReadableCacheFile cacheFile, final long timestamp, final UUID session, final boolean fromCache, final String mimetype) {
+				Log.i(TAG, "Successfully precached " + url);
+			}
+		});
 	}
 }

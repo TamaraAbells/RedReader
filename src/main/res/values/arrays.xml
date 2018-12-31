@@ -101,6 +101,7 @@
 		<item>@string/sort_posts_new</item>
 		<!-- <item>@string/sort_posts_rising</item> -->
 		<item>@string/sort_posts_controversial</item>
+		<item>@string/sort_posts_best</item>
 		<item>@string/sort_posts_top_hour</item>
 		<item>@string/sort_posts_top_today</item>
 		<item>@string/sort_posts_top_week</item>
@@ -115,6 +116,7 @@
 		<item>new</item>
 		<!-- <item>rising</item> -->
 		<item>controversial</item>
+		<item>best</item>
 		<item>top_hour</item>
 		<item>top_day</item>
 		<item>top_week</item>
@@ -753,6 +755,34 @@
 		<item>user</item>
 		<item>url</item>
 		<item>search</item>
+	</string-array>
+
+	<!-- 2018-10-6 -->
+
+	<string-array name="pref_menus_mainmenu_shortcutitems_items">
+		<item>@string/mainmenu_frontpage</item>
+		<item>@string/mainmenu_popular</item>
+		<item>@string/mainmenu_all</item>
+		<item>@string/mainmenu_custom_destination</item>
+		<item>@string/mainmenu_random</item>
+		<item>@string/mainmenu_random_nsfw</item>
+	</string-array>
+
+	<!-- Constants. Do not change. -->
+	<string-array name="pref_menus_mainmenu_shortcutitems_items_return">
+		<item>frontpage</item>
+		<item>popular</item>
+		<item>all</item>
+		<item>custom</item>
+		<item>random</item>
+		<item>random_nsfw</item>
+	</string-array>
+
+	<!-- Constants. Do not change. -->
+	<string-array name="pref_menus_mainmenu_shortcutitems_items_default">
+		<item>frontpage</item>
+		<item>all</item>
+		<item>custom</item>
 	</string-array>
 
 </resources>

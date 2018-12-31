@@ -35,6 +35,7 @@ import android.text.Html;
 import org.saiditnet.redreader.BuildConfig;
 import org.saiditnet.redreader.R;
 import org.saiditnet.redreader.activities.ChangelogActivity;
+import org.saiditnet.redreader.activities.HtmlViewActivity;
 import org.saiditnet.redreader.cache.CacheManager;
 import org.saiditnet.redreader.common.AndroidCommon;
 import org.saiditnet.redreader.common.General;
@@ -151,6 +152,7 @@ public final class SettingsFragment extends PreferenceFragment {
 		final Preference versionPref = findPreference(getString(R.string.pref_about_version_key));
 		final Preference changelogPref = findPreference(getString(R.string.pref_about_changelog_key));
 		final Preference torPref = findPreference(getString(R.string.pref_network_tor_key));
+		final Preference licensePref = findPreference(getString(R.string.pref_about_license_key));
 
 		final PackageInfo pInfo;
 
@@ -169,6 +171,15 @@ public final class SettingsFragment extends PreferenceFragment {
 				public boolean onPreferenceClick(Preference preference) {
 					final Intent intent = new Intent(context, ChangelogActivity.class);
 					context.startActivity(intent);
+					return true;
+				}
+			});
+		}
+
+		if(licensePref != null) {
+			licensePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				public boolean onPreferenceClick(Preference preference) {
+					HtmlViewActivity.showAsset(context, "license.html");
 					return true;
 				}
 			});

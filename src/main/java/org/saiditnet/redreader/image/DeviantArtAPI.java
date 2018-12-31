@@ -18,6 +18,7 @@
 package org.saiditnet.redreader.image;
 
 import android.content.Context;
+
 import org.saiditnet.redreader.account.RedditAccountManager;
 import org.saiditnet.redreader.activities.BugReportActivity;
 import org.saiditnet.redreader.cache.CacheManager;
@@ -30,7 +31,7 @@ import org.saiditnet.redreader.jsonwrap.JsonValue;
 
 import java.util.UUID;
 
-public final class GfycatAPI {
+public final class DeviantArtAPI {
 
 	public static void getImageInfo(
 			final Context context,
@@ -39,7 +40,7 @@ public final class GfycatAPI {
 			final int listId,
 			final GetImageInfoListener listener) {
 
-		final String apiUrl = "https://api.gfycat.com/v1/gfycats/" + imageId;
+		final String apiUrl = "https://backend.deviantart.com/oembed?url=" + imageId;
 
 		CacheManager.getInstance(context).makeRequest(new CacheRequest(
 				General.uriFromString(apiUrl),
@@ -60,35 +61,31 @@ public final class GfycatAPI {
 			}
 
 			@Override
-			protected void onDownloadNecessary() {
-			}
+			protected void onDownloadNecessary() {}
 
 			@Override
-			protected void onDownloadStarted() {
-			}
+			protected void onDownloadStarted() {}
 
 			@Override
-			protected void onFailure(final @CacheRequest.RequestFailureType int type, final Throwable t, final Integer status, final String readableMessage) {
+			protected void onFailure(final @RequestFailureType int type, final Throwable t, final Integer status, final String readableMessage) {
 				listener.onFailure(type, t, status, readableMessage);
 			}
 
 			@Override
-			protected void onProgress(final boolean authorizationInProgress, final long bytesRead, final long totalBytes) {
-			}
+			protected void onProgress(final boolean authorizationInProgress, final long bytesRead, final long totalBytes) {}
 
 			@Override
-			protected void onSuccess(final CacheManager.ReadableCacheFile cacheFile, final long timestamp, final UUID session, final boolean fromCache, final String mimetype) {
-			}
+			protected void onSuccess(final CacheManager.ReadableCacheFile cacheFile, final long timestamp, final UUID session, final boolean fromCache, final String mimetype) {}
 
 			@Override
 			public void onJsonParseStarted(final JsonValue result, final long timestamp, final UUID session, final boolean fromCache) {
 
 				try {
-					final JsonBufferedObject outer = result.asObject().getObject("gfyItem");
-					listener.onSuccess(ImageInfo.parseGfycat(outer));
+					final JsonBufferedObject outer = result.asObject();
+					listener.onSuccess(ImageInfo.parseDeviantArt(outer));
 
 				} catch(Throwable t) {
-					listener.onFailure(CacheRequest.REQUEST_FAILURE_PARSE, t, null, "Gfycat data parse failed");
+					listener.onFailure(CacheRequest.REQUEST_FAILURE_PARSE, t, null, "DeviantArt data parse failed");
 				}
 			}
 		});

@@ -115,6 +115,10 @@ public class SearchPostListURL extends PostListingURL {
 
 		builder.appendEncodedPath(".json");
 
+		// if the user doesn't have NSFW content disabled, it won't show up anyway
+		// leaving this on by default doesn't hurt
+		builder.appendQueryParameter("include_over_18", "on");
+
 		return builder.build();
 	}
 

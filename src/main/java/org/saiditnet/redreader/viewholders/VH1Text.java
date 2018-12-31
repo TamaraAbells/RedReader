@@ -17,6 +17,7 @@
 
 package org.saiditnet.redreader.viewholders;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import org.saiditnet.redreader.R;
@@ -24,7 +25,7 @@ import org.saiditnet.redreader.R;
 /**
  * A view holder for a one line, text only list item.
  */
-public class VH1Text extends VH {
+public class VH1Text extends RecyclerView.ViewHolder {
 
 	public final TextView text;
 

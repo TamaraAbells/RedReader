@@ -26,12 +26,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.ClipboardManager;
 import android.util.Log;
+import android.util.TypedValue;
 import org.saiditnet.redreader.R;
 import org.saiditnet.redreader.activities.*;
 import org.saiditnet.redreader.cache.CacheRequest;
@@ -168,9 +171,30 @@ public class LinkHandler {
 				}
 
 				case INTERNAL_BROWSER: {
-					final Intent intent = new Intent(activity, WebViewActivity.class);
-					intent.putExtra("url", url);
-					intent.putExtra("post", post);
+					final Intent intent = new Intent();
+					if (PrefsUtility.pref_behaviour_usecustomtabs(activity, sharedPreferences) &&
+							Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+						intent.setAction(Intent.ACTION_VIEW);
+						intent.setData(Uri.parse(url));
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+						Bundle bundle = new Bundle();
+						bundle.putBinder("android.support.customtabs.extra.SESSION", null);
+						intent.putExtras(bundle);
+
+						intent.putExtra("android.support.customtabs.extra.SHARE_MENU_ITEM", true);
+
+						TypedValue typedValue = new TypedValue();
+						activity.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+
+						intent.putExtra("android.support.customtabs.extra.TOOLBAR_COLOR", typedValue.data);
+
+						intent.putExtra("android.support.customtabs.extra.ENABLE_URLBAR_HIDING", true);
+					} else {
+						intent.setClass(activity, WebViewActivity.class);
+						intent.putExtra("url", url);
+						intent.putExtra("post", post);
+					}
 					activity.startActivity(intent);
 					return;
 				}
@@ -238,9 +262,31 @@ public class LinkHandler {
 			}
 		}
 
-		final Intent intent = new Intent(activity, WebViewActivity.class);
-		intent.putExtra("url", url);
-		intent.putExtra("post", post);
+		final Intent intent = new Intent();
+		if (PrefsUtility.pref_behaviour_usecustomtabs(activity, sharedPreferences)
+				&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			intent.setAction(Intent.ACTION_VIEW);
+			intent.setData(Uri.parse(url));
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+			Bundle bundle = new Bundle();
+			bundle.putBinder("android.support.customtabs.extra.SESSION", null);
+			intent.putExtras(bundle);
+
+			intent.putExtra("android.support.customtabs.extra.SHARE_MENU_ITEM", true);
+
+			TypedValue typedValue = new TypedValue();
+			activity.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+
+			intent.putExtra("android.support.customtabs.extra.TOOLBAR_COLOR", typedValue.data);
+
+			intent.putExtra("android.support.customtabs.extra.ENABLE_URLBAR_HIDING", true);
+		} else {
+			intent.setClass(activity, WebViewActivity.class);
+			intent.putExtra("url", url);
+			intent.putExtra("post", post);
+		}
+
 		activity.startActivity(intent);
 	}
 
@@ -393,7 +439,8 @@ public class LinkHandler {
 			reddituploadsPattern = Pattern.compile(".*[^A-Za-z]i\\.reddituploads\\.com/(\\w+).*"),
 			redditVideosPattern = Pattern.compile(".*[^A-Za-z]v.redd.it/(\\w+).*"),
 			imgflipPattern = Pattern.compile(".*[^A-Za-z]imgflip\\.com/i/(\\w+).*"),
-			makeamemePattern = Pattern.compile(".*[^A-Za-z]makeameme\\.org/meme/([\\w\\-]+).*");
+			makeamemePattern = Pattern.compile(".*[^A-Za-z]makeameme\\.org/meme/([\\w\\-]+).*"),
+			deviantartPattern = Pattern.compile("https://www\\.deviantart\\.com/([\\w\\-]+)/art/([\\w\\-]+)");
 
 	public static boolean isProbablyAnImage(final String url) {
 
@@ -457,6 +504,28 @@ public class LinkHandler {
 
 			if(matchMakeameme.find()) {
 				final String imgId = matchMakeameme.group(1);
+				if(imgId.length() > 3) {
+					return true;
+				}
+			}
+		}
+
+		{
+			final Matcher matchDeviantart = deviantartPattern.matcher(url);
+
+			if(matchDeviantart.find()) {
+				final String imgId = url;
+				if(imgId.length() > 40) {
+					return true;
+				}
+			}
+		}
+
+		{
+			final Matcher matchRedditVideos = redditVideosPattern.matcher(url);
+
+			if(matchRedditVideos.find()) {
+				final String imgId = matchRedditVideos.group(1);
 				if(imgId.length() > 3) {
 					return true;
 				}
@@ -625,6 +694,29 @@ public class LinkHandler {
 				}
 			}
 		}
+		{
+			final Matcher matchDeviantart = deviantartPattern.matcher(url);
+
+			if(matchDeviantart.find()) {
+				final String imgId = url;
+				if(imgId.length() > 40) {
+					DeviantArtAPI.getImageInfo(context, imgId, priority, listId, listener);
+					return;
+				}
+			}
+		}
+		{
+			final Matcher matchRedditVideos = redditVideosPattern.matcher(url);
+
+			if(matchRedditVideos.find()) {
+
+				final String imgId = matchRedditVideos.group(1);
+				if(imgId.length() > 3) {
+					RedditVideosAPI.getImageInfo(context, imgId, priority, listId, listener);
+					return;
+				}
+			}
+		}
 
 		final ImageInfo imageUrlPatternMatch = getImageUrlPatternMatch(url);
 
@@ -669,23 +761,6 @@ public class LinkHandler {
 				final String imgId = matchMakeameme.group(1);
 				if(imgId.length() > 3) {
 					final String imageUrl = "https://media.makeameme.org/created/" + imgId + ".jpg";
-					return new ImageInfo(imageUrl, ImageInfo.MediaType.IMAGE);
-				}
-			}
-		}
-
-		{
-			final Matcher match = redditVideosPattern.matcher(url);
-
-			if(match.find()) {
-				final String imgId = match.group(1);
-				if(imgId.length() > 3) {
-
-					if(url.contains("DASH")) {
-						return new ImageInfo(url, ImageInfo.MediaType.IMAGE);
-					}
-
-					final String imageUrl = "https://v.redd.it/" + imgId + "/DASH_600_K";
 					return new ImageInfo(imageUrl, ImageInfo.MediaType.IMAGE);
 				}
 			}

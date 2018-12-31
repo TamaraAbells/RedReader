@@ -18,12 +18,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.saiditnet.redreader"
-          android:versionCode="84"
-          android:versionName="1.9.8.5"
+          android:versionCode="85"
+          android:versionName="1.9.9"
           android:installLocation="auto">
-
-    <uses-sdk android:minSdkVersion="14"
-              android:targetSdkVersion="26" />
 
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
@@ -147,7 +144,17 @@
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:resource="@dimen/app_defaultsize_h" />
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:resource="@dimen/app_minimumsize_w" />
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:resource="@dimen/app_minimumsize_h" />
-
+		
+		<provider
+				android:name="android.support.v4.content.FileProvider"
+				android:authorities="org.saiditnet.redreader.provider"
+				android:exported="false"
+				android:grantUriPermissions="true">
+			<meta-data
+					android:name="android.support.FILE_PROVIDER_PATHS"
+					android:resource="@xml/file_paths">
+			</meta-data>
+		</provider>
     </application>
 
 </manifest>

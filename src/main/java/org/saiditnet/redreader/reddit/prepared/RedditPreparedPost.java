@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.ClipboardManager;
 import android.text.SpannableStringBuilder;
@@ -680,14 +681,18 @@ public final class RedditPreparedPost {
 				R.attr.rrPostSubtitleUpvoteCol,
 				R.attr.rrPostSubtitleDownvoteCol,
 				R.attr.rrFlairBackCol,
-				R.attr.rrFlairTextCol
+				R.attr.rrFlairTextCol,
+				R.attr.rrGoldTextCol,
+				R.attr.rrGoldBackCol
 		});
 
 		final int boldCol = appearance.getColor(0, 255),
 				rrPostSubtitleUpvoteCol = appearance.getColor(1, 255),
 				rrPostSubtitleDownvoteCol = appearance.getColor(2, 255),
 				rrFlairBackCol = appearance.getColor(3, 255),
-				rrFlairTextCol = appearance.getColor(4, 255);
+				rrFlairTextCol = appearance.getColor(4, 255),
+				rrGoldTextCol = appearance.getColor(5, 255),
+				rrGoldBackCol = appearance.getColor(6, 255);
 
 		appearance.recycle();
 
@@ -731,6 +736,14 @@ public final class RedditPreparedPost {
 
 		postListDescSb.append(String.valueOf(score), BetterSSB.BOLD | BetterSSB.FOREGROUND_COLOR, pointsCol, 0, 1f);
 		postListDescSb.append(" " + context.getString(R.string.subtitle_points) + " ", 0);
+
+		if (src.getGoldAmount() > 0) {
+			postListDescSb.append(" ", 0);
+			postListDescSb.append(" " + context.getString(R.string.gold) + " x" + src.getGoldAmount() + " ",
+					BetterSSB.FOREGROUND_COLOR | BetterSSB.BACKGROUND_COLOR, rrGoldTextCol, rrGoldBackCol, 1f);
+			postListDescSb.append("  ", 0);
+		}
+
 		postListDescSb.append(RRTime.formatDurationFrom(context, src.getCreatedTimeSecsUTC() * 1000), BetterSSB.BOLD | BetterSSB.FOREGROUND_COLOR, boldCol, 0, 1f);
 		postListDescSb.append(" " + context.getString(R.string.subtitle_by) + " ", 0);
 		postListDescSb.append(src.getAuthor(), BetterSSB.BOLD | BetterSSB.FOREGROUND_COLOR, boldCol, 0, 1f);
@@ -999,7 +1012,7 @@ public final class RedditPreparedPost {
 					}
 
 					@Override
-					protected void onSuccess() {
+					protected void onSuccess(@Nullable final String redirectUrl) {
 
 						final long now = RRTime.utcCurrentTimeMillis();
 
