@@ -27,14 +27,17 @@ Features
 Downloading
 -----------
 
-SaidIt RedReader is available for free on the Google Play store:
+SaidIt RedReader is available for free on the Google Play store and F-Droid:
 
-https://play.google.com/store/apps/details?id=org.saiditnet.redreader
+* https://play.google.com/store/apps/details?id=org.saiditnet.redreader
+* https://f-droid.org/packages/org.saiditnet.redreader/
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
       alt="Get it on Google Play"
       height="80">](https://play.google.com/store/apps/details?id=org.saiditnet.redreader)
-
+[<img src="https://f-droid.org/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/io.oversec.one/)
 
 Translating
 -----------
