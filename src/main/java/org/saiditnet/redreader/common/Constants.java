@@ -52,16 +52,24 @@ public final class Constants {
 	public static final class Reddit {
 
 		public static final String[] DEFAULT_SUBREDDITS = {
-				"/s/funny",
-				"/s/gifs",
-				"/s/music",
-				"/s/MusicVideos",
+				"/s/AntiWar",
+				"/s/business",
+				"/s/censorship",
+				"/s/collusion",
+				"/s/corruption",
+				"/s/finance",
+				"/s/maps",
+				"/s/news",
 				"/s/pics",
+				"/s/politics",
+				"/s/privacy",
+				"/s/quotes",
 				"/s/SaidIt",
 				"/s/science",
+				"/s/TechCompanies",
 				"/s/technology",
-				"/s/videos",
-				"/s/WorldNews"
+				"/s/WorldNews",
+				"/s/WorldPolitics"
 		};
 
 		public static final String

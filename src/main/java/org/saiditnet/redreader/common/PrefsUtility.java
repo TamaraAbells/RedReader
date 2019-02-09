@@ -280,7 +280,7 @@ public final class PrefsUtility {
 	}
 
 	public static boolean pref_appearance_linkbuttons(final Context context, final SharedPreferences sharedPreferences) {
-		return getBoolean(R.string.pref_appearance_linkbuttons_key, true, context, sharedPreferences);
+		return getBoolean(R.string.pref_appearance_linkbuttons_key, false, context, sharedPreferences);
 	}
 
 	public static boolean pref_appearance_hide_android_status(final Context context, final SharedPreferences sharedPreferences) {

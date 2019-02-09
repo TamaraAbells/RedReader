@@ -588,8 +588,6 @@
         <item>inbox</item>
         <item>submitted</item>
         <item>saved</item>
-        <item>hidden</item>
-        <item>upvoted</item>
     </string-array>
 
     <!-- 2015-06-20 -->
