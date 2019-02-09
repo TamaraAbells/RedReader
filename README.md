@@ -37,7 +37,7 @@ SaidIt RedReader is available for free on the Google Play store and F-Droid:
       height="80">](https://play.google.com/store/apps/details?id=org.saiditnet.redreader)
 [<img src="https://f-droid.org/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/io.oversec.one/)
+     height="80">](https://f-droid.org/packages/org.saiditnet.redreader/)
 
 Translating
 -----------
