@@ -24,7 +24,8 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
 	implementation 'com.android.support:support-media-compat:28.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    // Force downgrade okhttp from 3.10.0 for improved Android 4.x TLS 1.0 compatibility, https://github.com/square/okhttp/issues/3894
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'info.guardianproject.netcipher:netcipher:1.2.1'
 	implementation 'com.google.android.exoplayer:exoplayer-core:2.9.1'
 	implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.1'
